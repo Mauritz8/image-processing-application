@@ -12,7 +12,7 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
 
     const BitmapHeader bitmapHeader = {
         .identity = contents.substr(0, 2),
-        .size = calc_value(get_byte_values(contents.substr(2, 4))), 
+        .nBytes = calc_value(get_byte_values(contents.substr(2, 4))), 
         .reserved1 = calc_value(get_byte_values(contents.substr(6, 2))),
         .reserved2 = calc_value(get_byte_values(contents.substr(8, 2))),
         .offset = calc_value(get_byte_values(contents.substr(10, 4)))
@@ -20,11 +20,17 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     this->header = bitmapHeader;
 
     const DIBHeader dibHeader = {
-        .size = calc_value(get_byte_values(contents.substr(14, 4))),
+        .dibHeaderSize = calc_value(get_byte_values(contents.substr(14, 4))),
         .width = calc_value(get_byte_values(contents.substr(18, 4))),
         .height = calc_value(get_byte_values(contents.substr(22, 4))),
         .colorPlanes = calc_value(get_byte_values(contents.substr(26, 2))),
         .bitsPerPixel = calc_value(get_byte_values(contents.substr(28, 2))),
+        .compressionMethod = calc_value(get_byte_values(contents.substr(30, 4))),
+        .imageSize = calc_value(get_byte_values(contents.substr(34, 4))),
+        .horizontalRes = calc_value(get_byte_values(contents.substr(38, 4))),
+        .verticalRes = calc_value(get_byte_values(contents.substr(42, 4))),
+        .nColors = calc_value(get_byte_values(contents.substr(46, 4))),
+        .nImportantColors = calc_value(get_byte_values(contents.substr(50, 4))),
     };
     this->dibHeader = dibHeader;
 

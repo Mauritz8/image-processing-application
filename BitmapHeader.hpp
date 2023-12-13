@@ -5,7 +5,7 @@
 class BitmapHeader {
     public:
         std::string identity;
-        int size;
+        int nBytes;
         int reserved1;
         int reserved2;
         int offset;
