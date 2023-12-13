@@ -37,10 +37,10 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     file.close();
 }
 
-int BitmapImg::calcValue(const std::vector<int>& little_endian_bytes) {
+int BitmapImg::calcValue(const std::vector<int>& littleEndianBytes) {
     int sum = 0;
-    for (int i = 0; i < little_endian_bytes.size(); i++) {
-        sum += little_endian_bytes.at(i) * std::pow(256, i); 
+    for (int i = 0; i < littleEndianBytes.size(); i++) {
+        sum += littleEndianBytes.at(i) * std::pow(256, i); 
     }
     return sum;
 }
