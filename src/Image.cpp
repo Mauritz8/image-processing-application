@@ -17,13 +17,13 @@ void Image::flipVertically() {
 }
 
 void Image::invertColor() {
-    const size_t nPixels = this->pixels.size();
-    for (size_t i = 0; i < nPixels; i++) {
-        const Pixel p = {
-            .red = 255 - pixels.at(i).red,
-            .green = 255 - pixels.at(i).green,
-            .blue = 255 - pixels.at(i).blue,
+    auto color_invert = [](Pixel p) {
+        return Pixel{
+            .red = 255 - p.red,
+            .green = 255 - p.green,
+            .blue = 255 - p.blue,
         };
-        this->pixels.at(i) = p; 
-    }
+    };
+
+    std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_invert);
 }
