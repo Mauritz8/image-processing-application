@@ -4,12 +4,14 @@
 
 #include "BitmapHeader.hpp"
 #include "DIBHeader.hpp"
+#include "pixel.hpp"
 
 
 class BitmapImg {
     public:
         BitmapHeader header;
         DIBHeader dibHeader;
+        std::vector<Pixel> pixels;
 
         BitmapImg(const std::string& filepath);
 

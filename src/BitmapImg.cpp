@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 BitmapImg::BitmapImg(const std::string& filepath)  {
@@ -35,6 +36,22 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
         .nImportantColors = calcBytes(4),
     };
     this->dibHeader = dibHeader;
+    
+
+    const int nPixels = dibHeader.imageSize / 3;
+    for (int i = 0; i < nPixels; i++) {
+        const int blue = calcBytes(1);
+        const int green = calcBytes(1);
+        const int red = calcBytes(1);
+
+        const Pixel pixel = {
+            .red = red,
+            .green = green,
+            .blue = blue,
+        };
+        this->pixels.push_back(pixel);
+    }
+
 
     file.close();
 }
@@ -46,7 +63,7 @@ std::string BitmapImg::read(int n, std::ifstream& file) {
         res += file.get();
     }
     return res;
-};
+}
 
 int BitmapImg::calcLittleEndianByteSequence(const std::string& bytes) {
     const size_t nBytes = bytes.size();
