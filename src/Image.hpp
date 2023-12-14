@@ -11,7 +11,7 @@ class Image {
         const std::vector<Pixel>& getPixels() const;
         Pixel getPixel(int pos) const;
 
-        Image flipVertically() const;
+        void flipVertically();
 
     private:
         std::vector<Pixel> pixels;
