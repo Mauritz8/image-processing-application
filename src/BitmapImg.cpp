@@ -1,11 +1,12 @@
 #include "BitmapImg.hpp"
 
-#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "HelperFunctions.hpp"
 
 
 BitmapImg::BitmapImg(const std::string& filepath)  {
@@ -109,41 +110,4 @@ BitmapImg BitmapImg::flipVertically() const {
         newImg.pixels.push_back(this->pixels.at(nPixels - i - 1)); 
     }
     return newImg;
-}
-
-std::string BitmapImg::read(int n, std::ifstream& file) {
-    std::string res;
-    for (int i = 0; i < n; i++) {
-        res += file.get();
-    }
-    return res;
-}
-
-void BitmapImg::write(const std::vector<unsigned char>& chars, std::ofstream& file) {
-    for (unsigned char ch : chars) {
-        file << ch;
-    }
-}
-
-int BitmapImg::calcLittleEndianByteSequence(const std::string& bytes) {
-    const size_t nBytes = bytes.size();
-    int sum = 0;
-    for (size_t i = 0; i < nBytes; i++) {
-        const int value = convertCharToUnsignedInt(bytes.at(i));
-        sum += value * std::pow(256, i); 
-    }
-    return sum;
-}
-
-int BitmapImg::convertCharToUnsignedInt(char ch) {
-    return static_cast<int>(static_cast<unsigned char>(ch));
-}
-
-std::vector<unsigned char> BitmapImg::getBytes(int num, int nBytes) {
-    std::vector<unsigned char> bytes;
-    bytes.reserve(nBytes);
-    for (int i = 0; i < nBytes; i++) {
-        bytes.push_back((num >> 8 * i) & 0xFF); 
-    }
-    return bytes;
 }
