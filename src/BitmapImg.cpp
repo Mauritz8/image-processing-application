@@ -42,7 +42,8 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     
 
     const int nPixels = dibHeader.imageSize / 3;
-    this->pixels.reserve(nPixels);
+    std::vector<Pixel> pixels;
+    pixels.reserve(nPixels);
     for (int i = 0; i < nPixels; i++) {
         const int blue = calcBytes(1);
         const int green = calcBytes(1);
@@ -53,18 +54,12 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
             .green = green,
             .blue = blue,
         };
-        this->pixels.push_back(pixel);
+        pixels.push_back(pixel);
     }
+    this->image = Image(pixels);
 
 
     file.close();
-}
-
-BitmapImg BitmapImg::createCopyExceptPixels(const BitmapImg& img) {
-    BitmapImg newImg;
-    newImg.header = img.header;
-    newImg.dibHeader = img.dibHeader;
-    return newImg;
 }
 
 void BitmapImg::save(const std::string& filepath) const {
@@ -92,7 +87,7 @@ void BitmapImg::save(const std::string& filepath) const {
     write_field(dibHeader.nColors, 4);
     write_field(dibHeader.nImportantColors, 4);
 
-    for (const Pixel& pixel : pixels) {
+    for (const Pixel& pixel : image.getPixels()) {
         write_field(pixel.blue, 1);
         write_field(pixel.green, 1);
         write_field(pixel.red, 1);
@@ -101,13 +96,3 @@ void BitmapImg::save(const std::string& filepath) const {
     file.close();
 }
 
-BitmapImg BitmapImg::flipVertically() const {
-    BitmapImg newImg = createCopyExceptPixels(*this);
-
-    const size_t nPixels = this->pixels.size();
-    newImg.pixels.reserve(nPixels);
-    for (size_t i = 0; i < nPixels; i++) {
-        newImg.pixels.push_back(this->pixels.at(nPixels - i - 1)); 
-    }
-    return newImg;
-}
