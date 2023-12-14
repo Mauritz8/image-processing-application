@@ -13,6 +13,7 @@ class Image {
 
         Image& flipVertically();
         Image& invertColor();
+        Image& colorRotate();
 
     private:
         std::vector<Pixel> pixels;

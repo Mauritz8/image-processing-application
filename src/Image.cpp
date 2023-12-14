@@ -29,3 +29,16 @@ Image& Image::invertColor() {
     std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_invert);
     return *this;
 }
+
+Image& Image::colorRotate() {
+    auto color_rotate = [](Pixel p) {
+        return Pixel{
+            .red = p.blue,
+            .green = p.red,
+            .blue = p.green,
+        };
+    };
+
+    std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_rotate);
+    return *this;
+}
