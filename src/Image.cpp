@@ -12,11 +12,12 @@ Pixel Image::getPixel(int pos) const {
     return pixels.at(pos);
 }
 
-void Image::flipVertically() {
+Image& Image::flipVertically() {
     std::reverse(pixels.begin(), pixels.end());
+    return *this;
 }
 
-void Image::invertColor() {
+Image& Image::invertColor() {
     auto color_invert = [](Pixel p) {
         return Pixel{
             .red = 255 - p.red,
@@ -26,4 +27,5 @@ void Image::invertColor() {
     };
 
     std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_invert);
+    return *this;
 }
