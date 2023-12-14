@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <iostream>
 #include <string>
 
@@ -9,7 +10,7 @@
 BitmapImg::BitmapImg(const std::string& filepath)  {
     std::ifstream file(filepath, std::ifstream::binary);
 
-    auto calcBytes = [&file](int n) {return calcValue(read(n, file));};
+    auto calcBytes = [&file](int n) {return calcLittleEndianByteSequence(read(n, file));};
 
     const BitmapHeader bitmapHeader = {
         .identity = read(2, file),
@@ -47,16 +48,16 @@ std::string BitmapImg::read(int n, std::ifstream& file) {
     return res;
 };
 
-int BitmapImg::calcValue(const std::string& littleEndianBytes) {
-    const int nBytes = littleEndianBytes.size();
+int BitmapImg::calcLittleEndianByteSequence(const std::string& bytes) {
+    const size_t nBytes = bytes.size();
     int sum = 0;
-    for (int i = 0; i < nBytes; i++) {
-        const int byte = convertCharToUnsignedByte(littleEndianBytes.at(i));
-        sum += byte * std::pow(256, i); 
+    for (size_t i = 0; i < nBytes; i++) {
+        const int value = convertCharToUnsignedInt(bytes.at(i));
+        sum += value * std::pow(256, i); 
     }
     return sum;
 }
 
-int BitmapImg::convertCharToUnsignedByte(char ch) {
+int BitmapImg::convertCharToUnsignedInt(char ch) {
     return static_cast<int>(static_cast<unsigned char>(ch));
 }

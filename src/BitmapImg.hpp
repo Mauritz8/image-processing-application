@@ -15,6 +15,6 @@ class BitmapImg {
 
     private:
         static std::string read(int n, std::ifstream& file);
-        static int calcValue(const std::string& littleEndianBytes);
-        static int convertCharToUnsignedByte(char ch);
+        static int calcLittleEndianByteSequence(const std::string& bytes);
+        static int convertCharToUnsignedInt(char ch);
 };
