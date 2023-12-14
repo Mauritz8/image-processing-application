@@ -4,7 +4,7 @@
 
 #include "BitmapHeader.hpp"
 #include "DIBHeader.hpp"
-#include "pixel.hpp"
+#include "Pixel.hpp"
 
 
 class BitmapImg {

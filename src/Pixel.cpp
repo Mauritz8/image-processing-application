@@ -1,4 +1,4 @@
-#include "pixel.hpp"
+#include "Pixel.hpp"
 
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
