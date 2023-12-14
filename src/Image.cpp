@@ -1,5 +1,6 @@
 #include "Image.hpp"
 
+#include <algorithm>
 #include <vector>
 
 
@@ -12,13 +13,7 @@ Pixel Image::getPixel(int pos) const {
 }
 
 void Image::flipVertically() {
-    const size_t nPixels = this->pixels.size();
-    std::vector<Pixel> new_pixels;
-    new_pixels.reserve(nPixels);
-    for (size_t i = 0; i < nPixels; i++) {
-        new_pixels.push_back(this->pixels.at(nPixels - i - 1)); 
-    }
-    this->pixels = new_pixels;
+    std::reverse(pixels.begin(), pixels.end());
 }
 
 void Image::invertColor() {
