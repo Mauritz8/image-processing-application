@@ -62,14 +62,6 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     file.close();
 }
 
-
-BitmapHeader BitmapImg::getBitmapHeader() const {
-    return bitmapHeader;
-}
-DIBHeader BitmapImg::getDIBHeader() const {
-    return dibHeader;
-}
-
 void BitmapImg::save(const std::string& filepath) const {
     std::ofstream file(filepath, std::ofstream::binary);
 
@@ -104,3 +96,14 @@ void BitmapImg::save(const std::string& filepath) const {
     file.close();
 }
 
+const BitmapHeader& BitmapImg::getBitmapHeader() const {
+    return bitmapHeader;
+}
+
+const DIBHeader& BitmapImg::getDIBHeader() const {
+    return dibHeader;
+}
+
+Image& BitmapImg::getImage() {
+    return image;
+}
