@@ -5,6 +5,6 @@
 
 int main() {
     BitmapImg bitmapImg = BitmapImg("test.bmp");
-    std::cout << bitmapImg.header;
-    std::cout << bitmapImg.dibHeader;
+    std::cout << bitmapImg.getBitmapHeader();
+    std::cout << bitmapImg.getDIBHeader();
 }

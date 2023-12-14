@@ -23,7 +23,7 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
         .reserved2 = calcBytes(2),
         .offset = calcBytes(4)
     };
-    this->header = bitmapHeader;
+    this->bitmapHeader = bitmapHeader;
 
     const DIBHeader dibHeader = {
         .dibHeaderSize = calcBytes(4),
@@ -62,6 +62,14 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     file.close();
 }
 
+
+BitmapHeader BitmapImg::getBitmapHeader() const {
+    return bitmapHeader;
+}
+DIBHeader BitmapImg::getDIBHeader() const {
+    return dibHeader;
+}
+
 void BitmapImg::save(const std::string& filepath) const {
     std::ofstream file(filepath, std::ofstream::binary);
 
@@ -69,11 +77,11 @@ void BitmapImg::save(const std::string& filepath) const {
         write(getBytes(num, nBytes), file);
     };
 
-    file << header.identity;
-    write_field(header.nBytes, 4);
-    write_field(header.reserved1, 2);
-    write_field(header.reserved2, 2);
-    write_field(header.offset, 4);
+    file << bitmapHeader.identity;
+    write_field(bitmapHeader.nBytes, 4);
+    write_field(bitmapHeader.reserved1, 2);
+    write_field(bitmapHeader.reserved2, 2);
+    write_field(bitmapHeader.offset, 4);
 
     write_field(dibHeader.dibHeaderSize, 4);
     write_field(dibHeader.width, 4);

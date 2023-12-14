@@ -8,10 +8,15 @@
 
 class BitmapImg {
     public:
-        BitmapHeader header;
-        DIBHeader dibHeader;
         Image image;
+
+        BitmapHeader getBitmapHeader() const;
+        DIBHeader getDIBHeader() const;
 
         BitmapImg(const std::string& filepath);
         void save(const std::string& filepath) const;
+
+    private:
+        BitmapHeader bitmapHeader;
+        DIBHeader dibHeader;
 };
