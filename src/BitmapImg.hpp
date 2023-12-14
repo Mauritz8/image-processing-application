@@ -13,8 +13,12 @@ class BitmapImg {
         DIBHeader dibHeader;
         std::vector<Pixel> pixels;
 
+        BitmapImg() {};
         BitmapImg(const std::string& filepath);
+        static BitmapImg createCopyExceptPixels(const BitmapImg& img);
+
         void save(const std::string& filepath);
+        BitmapImg flipVertically() const;
 
     private:
         static std::string read(int n, std::ifstream& file);

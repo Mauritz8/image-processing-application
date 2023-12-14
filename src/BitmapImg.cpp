@@ -59,6 +59,13 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     file.close();
 }
 
+BitmapImg BitmapImg::createCopyExceptPixels(const BitmapImg& img) {
+    BitmapImg newImg;
+    newImg.header = img.header;
+    newImg.dibHeader = img.dibHeader;
+    return newImg;
+}
+
 void BitmapImg::save(const std::string& filepath) {
     std::ofstream file(filepath, std::ofstream::binary);
 
@@ -91,6 +98,17 @@ void BitmapImg::save(const std::string& filepath) {
     }
 
     file.close();
+}
+
+BitmapImg BitmapImg::flipVertically() const {
+    BitmapImg newImg = createCopyExceptPixels(*this);
+
+    const size_t nPixels = this->pixels.size();
+    newImg.pixels.reserve(nPixels);
+    for (size_t i = 0; i < nPixels; i++) {
+        newImg.pixels.push_back(this->pixels.at(nPixels - i - 1)); 
+    }
+    return newImg;
 }
 
 std::string BitmapImg::read(int n, std::ifstream& file) {
