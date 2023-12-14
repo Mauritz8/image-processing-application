@@ -12,6 +12,7 @@ class Image {
         Pixel getPixel(int pos) const;
 
         void flipVertically();
+        void invertColor();
 
     private:
         std::vector<Pixel> pixels;
