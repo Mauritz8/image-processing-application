@@ -8,39 +8,49 @@
 
 BitmapImg::BitmapImg(const std::string& filepath)  {
     std::ifstream file(filepath, std::ifstream::binary);
-    const std::string contents((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
+
+    auto calcBytes = [&file](int n) {return calcValue(read(n, file));};
 
     const BitmapHeader bitmapHeader = {
-        .identity = contents.substr(0, 2),
-        .nBytes = calcValue(contents.substr(2, 4)), 
-        .reserved1 = calcValue(contents.substr(6, 2)),
-        .reserved2 = calcValue(contents.substr(8, 2)),
-        .offset = calcValue(contents.substr(10, 4))
+        .identity = read(2, file),
+        .nBytes = calcBytes(4), 
+        .reserved1 = calcBytes(2),
+        .reserved2 = calcBytes(2),
+        .offset = calcBytes(4)
     };
     this->header = bitmapHeader;
 
     const DIBHeader dibHeader = {
-        .dibHeaderSize = calcValue(contents.substr(14, 4)),
-        .width = calcValue(contents.substr(18, 4)),
-        .height = calcValue(contents.substr(22, 4)),
-        .colorPlanes = calcValue(contents.substr(26, 2)),
-        .bitsPerPixel = calcValue(contents.substr(28, 2)),
-        .compressionMethod = calcValue(contents.substr(30, 4)),
-        .imageSize = calcValue(contents.substr(34, 4)),
-        .horizontalRes = calcValue(contents.substr(38, 4)),
-        .verticalRes = calcValue(contents.substr(42, 4)),
-        .nColors = calcValue(contents.substr(46, 4)),
-        .nImportantColors = calcValue(contents.substr(50, 4)),
+        .dibHeaderSize = calcBytes(4),
+        .width = calcBytes(4),
+        .height = calcBytes(4),
+        .colorPlanes = calcBytes(2),
+        .bitsPerPixel = calcBytes(2),
+        .compressionMethod = calcBytes(4),
+        .imageSize = calcBytes(4),
+        .horizontalRes = calcBytes(4),
+        .verticalRes = calcBytes(4),
+        .nColors = calcBytes(4),
+        .nImportantColors = calcBytes(4),
     };
     this->dibHeader = dibHeader;
 
     file.close();
 }
 
+
+std::string BitmapImg::read(int n, std::ifstream& file) {
+    std::string res;
+    for (int i = 0; i < n; i++) {
+        res += file.get();
+    }
+    return res;
+};
+
 int BitmapImg::calcValue(const std::string& littleEndianBytes) {
-    const int n_bytes = littleEndianBytes.size();
+    const int nBytes = littleEndianBytes.size();
     int sum = 0;
-    for (int i = 0; i < n_bytes; i++) {
+    for (int i = 0; i < nBytes; i++) {
         const int byte = convertCharToUnsignedByte(littleEndianBytes.at(i));
         sum += byte * std::pow(256, i); 
     }
