@@ -66,7 +66,7 @@ BitmapImg BitmapImg::createCopyExceptPixels(const BitmapImg& img) {
     return newImg;
 }
 
-void BitmapImg::save(const std::string& filepath) {
+void BitmapImg::save(const std::string& filepath) const {
     std::ofstream file(filepath, std::ofstream::binary);
 
     auto write_field = [&file](int num, int nBytes) {

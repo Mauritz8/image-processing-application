@@ -17,7 +17,7 @@ class BitmapImg {
         BitmapImg(const std::string& filepath);
         static BitmapImg createCopyExceptPixels(const BitmapImg& img);
 
-        void save(const std::string& filepath);
+        void save(const std::string& filepath) const;
         BitmapImg flipVertically() const;
 
     private:
