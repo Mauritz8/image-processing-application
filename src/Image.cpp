@@ -54,3 +54,53 @@ Image& Image::colorRotate() {
     }
     return *this;
 }
+
+Image& Image::zoom(int factor) {
+    scale(factor);
+    crop(factor);
+    return *this;
+}
+
+Image& Image::scale(int factor) {
+    std::vector<std::vector<Pixel>> newPixels;
+    newPixels.reserve(pixels.size() * factor);
+    for (const std::vector<Pixel>& row : pixels) {
+        std::vector<Pixel> newRow; 
+        newRow.reserve(row.size() * factor);
+        for (Pixel pixel : row) {
+            for (int i = 0; i < factor; i++) {
+                newRow.push_back(pixel);
+            }
+        }
+        for (int i = 0; i < factor; i++) {
+            newPixels.push_back(newRow);
+        }
+    }
+    pixels = newPixels;
+
+    return *this;
+}
+
+Image& Image::crop(int factor) {
+    const int height = getHeight();
+    const int newHeight = height / factor;
+    const int heightOffset = (height - newHeight) / 2;
+
+    const int width = getWidth();
+    const int newWidth = width / factor;
+    const int widthOffset = (width - newWidth) / 2;
+
+    std::vector<std::vector<Pixel>> newPixels;
+    newPixels.reserve(height / factor);
+    for (int i = heightOffset; i < height - heightOffset; i++) {
+        std::vector<Pixel> newRow; 
+        newRow.reserve(width / factor);
+        for (int j = widthOffset; j < width - widthOffset; j++) {
+            newRow.push_back(getPixel(j, i));
+        }
+        newPixels.push_back(newRow);
+    }
+    pixels = newPixels;
+
+    return *this; 
+}

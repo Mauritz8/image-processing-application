@@ -16,6 +16,9 @@ class Image {
         Image& flipVertically();
         Image& invertColor();
         Image& colorRotate();
+        Image& zoom(int factor);
+        Image& scale(int factor);
+        Image& crop(int factor);
 
     private:
         std::vector<std::vector<Pixel>> pixels;
