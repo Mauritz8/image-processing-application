@@ -4,12 +4,12 @@
 #include <vector>
 
 
-const std::vector<Pixel>& Image::getPixels() const {
+const std::vector<std::vector<Pixel>>& Image::getPixels() const {
     return pixels;
 }
 
-Pixel Image::getPixel(int pos) const {
-    return pixels.at(pos);
+Pixel Image::getPixel(int x, int y) const {
+    return pixels.at(y).at(x);
 }
 
 Image& Image::flipVertically() {

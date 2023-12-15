@@ -41,20 +41,26 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     this->dibHeader = dibHeader;
     
 
-    const int nPixels = dibHeader.imageSize / 3;
-    std::vector<Pixel> pixels;
-    pixels.reserve(nPixels);
-    for (int i = 0; i < nPixels; i++) {
-        const int blue = calcBytes(1);
-        const int green = calcBytes(1);
-        const int red = calcBytes(1);
+    const int rowPadding = dibHeader.width % 4;
+    std::vector<std::vector<Pixel>> pixels;
+    for (int i = 0; i < dibHeader.height; i++) {
+        std::vector<Pixel> row;
+        for (int j = 0; j < dibHeader.width; j++) {
+            const int blue = calcBytes(1);
+            const int green = calcBytes(1);
+            const int red = calcBytes(1);
 
-        const Pixel pixel = {
-            .red = red,
-            .green = green,
-            .blue = blue,
-        };
-        pixels.push_back(pixel);
+
+            const Pixel pixel = {
+                .red = red,
+                .green = green,
+                .blue = blue,
+            };
+            row.push_back(pixel);
+        }
+        pixels.push_back(row);
+
+        read(rowPadding, file);
     }
     this->image = Image(pixels);
 
@@ -87,10 +93,14 @@ void BitmapImg::save(const std::string& filepath) const {
     write_field(dibHeader.nColors, 4);
     write_field(dibHeader.nImportantColors, 4);
 
-    for (const Pixel& pixel : image.getPixels()) {
-        write_field(pixel.blue, 1);
-        write_field(pixel.green, 1);
-        write_field(pixel.red, 1);
+    for (auto row : image.getPixels()) {
+        for (auto pixel : row) {
+            write_field(pixel.blue, 1);
+            write_field(pixel.green, 1);
+            write_field(pixel.red, 1);
+        }
+        const int nBytesPadding = row.size() % 4;
+        write_field(0, nBytesPadding);
     }
 
     file.close();
