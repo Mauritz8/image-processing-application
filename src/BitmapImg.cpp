@@ -71,38 +71,38 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
 void BitmapImg::save(const std::string& filepath) {
     std::ofstream file(filepath, std::ofstream::binary);
 
-    auto write_field = [&file](int num, int nBytes) {
+    auto writeField = [&file](int num, int nBytes) {
         write(getBytes(num, nBytes), file);
     };
 
     updateMetadata();
 
     file << bitmapHeader.identity;
-    write_field(bitmapHeader.nBytes, 4);
-    write_field(bitmapHeader.reserved1, 2);
-    write_field(bitmapHeader.reserved2, 2);
-    write_field(bitmapHeader.offset, 4);
+    writeField(bitmapHeader.nBytes, 4);
+    writeField(bitmapHeader.reserved1, 2);
+    writeField(bitmapHeader.reserved2, 2);
+    writeField(bitmapHeader.offset, 4);
 
-    write_field(dibHeader.dibHeaderSize, 4);
-    write_field(dibHeader.width, 4);
-    write_field(dibHeader.height, 4);
-    write_field(dibHeader.colorPlanes, 2);
-    write_field(dibHeader.bitsPerPixel, 2);
-    write_field(dibHeader.compressionMethod, 4);
-    write_field(dibHeader.imageSize, 4);
-    write_field(dibHeader.horizontalRes, 4);
-    write_field(dibHeader.verticalRes, 4);
-    write_field(dibHeader.nColors, 4);
-    write_field(dibHeader.nImportantColors, 4);
+    writeField(dibHeader.dibHeaderSize, 4);
+    writeField(dibHeader.width, 4);
+    writeField(dibHeader.height, 4);
+    writeField(dibHeader.colorPlanes, 2);
+    writeField(dibHeader.bitsPerPixel, 2);
+    writeField(dibHeader.compressionMethod, 4);
+    writeField(dibHeader.imageSize, 4);
+    writeField(dibHeader.horizontalRes, 4);
+    writeField(dibHeader.verticalRes, 4);
+    writeField(dibHeader.nColors, 4);
+    writeField(dibHeader.nImportantColors, 4);
 
     for (auto row : image.getPixels()) {
         for (auto pixel : row) {
-            write_field(pixel.blue, 1);
-            write_field(pixel.green, 1);
-            write_field(pixel.red, 1);
+            writeField(pixel.blue, 1);
+            writeField(pixel.green, 1);
+            writeField(pixel.red, 1);
         }
         const int nBytesPadding = row.size() % 4;
-        write_field(0, nBytesPadding);
+        writeField(0, nBytesPadding);
     }
 
     file.close();

@@ -26,7 +26,7 @@ Image& Image::flipVertically() {
 }
 
 Image& Image::invertColor() {
-    auto color_invert = [](Pixel p) {
+    auto colorInvert = [](Pixel p) {
         return Pixel{
             .red = 255 - p.red,
             .green = 255 - p.green,
@@ -35,13 +35,13 @@ Image& Image::invertColor() {
     };
 
     for (std::vector<Pixel>& row : pixels) {
-        std::transform(row.begin(), row.end(), row.begin(), color_invert);
+        std::transform(row.begin(), row.end(), row.begin(), colorInvert);
     }
     return *this;
 }
 
 Image& Image::colorRotate() {
-    auto color_rotate = [](Pixel p) {
+    auto colorRotate = [](Pixel p) {
         return Pixel{
             .red = p.blue,
             .green = p.red,
@@ -50,7 +50,7 @@ Image& Image::colorRotate() {
     };
 
     for (std::vector<Pixel>& row : pixels) {
-        std::transform(row.begin(), row.end(), row.begin(), color_rotate);
+        std::transform(row.begin(), row.end(), row.begin(), colorRotate);
     }
     return *this;
 }
