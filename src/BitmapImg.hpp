@@ -9,7 +9,7 @@
 class BitmapImg {
     public:
         BitmapImg(const std::string& filepath);
-        void save(const std::string& filepath) const;
+        void save(const std::string& filepath);
 
         const BitmapHeader& getBitmapHeader() const;
         const DIBHeader& getDIBHeader() const;
@@ -19,4 +19,6 @@ class BitmapImg {
         BitmapHeader bitmapHeader;
         DIBHeader dibHeader;
         Image image;
+
+        void updateMetadata();
 };

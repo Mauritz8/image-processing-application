@@ -68,12 +68,14 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     file.close();
 }
 
-void BitmapImg::save(const std::string& filepath) const {
+void BitmapImg::save(const std::string& filepath) {
     std::ofstream file(filepath, std::ofstream::binary);
 
     auto write_field = [&file](int num, int nBytes) {
         write(getBytes(num, nBytes), file);
     };
+
+    updateMetadata();
 
     file << bitmapHeader.identity;
     write_field(bitmapHeader.nBytes, 4);
@@ -116,4 +118,21 @@ const DIBHeader& BitmapImg::getDIBHeader() const {
 
 Image& BitmapImg::getImage() {
     return image;
+}
+
+void BitmapImg::updateMetadata() {
+    const int width = image.getWidth();
+    const int height = image.getHeight();
+    if (width == dibHeader.width && height == dibHeader.height) {
+        return;
+    }
+
+    dibHeader.width = width;
+    dibHeader.height = height;
+
+    const int bytesPerPixel = dibHeader.bitsPerPixel / 8;
+    const int paddingRow = width % 4;
+    const int padding = paddingRow * height;
+    dibHeader.imageSize = width * height * bytesPerPixel + padding;
+    bitmapHeader.nBytes = bitmapHeader.offset + dibHeader.imageSize;
 }
