@@ -26,7 +26,9 @@ Image& Image::invertColor() {
         };
     };
 
-    std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_invert);
+    for (std::vector<Pixel>& row : pixels) {
+        std::transform(row.begin(), row.end(), row.begin(), color_invert);
+    }
     return *this;
 }
 
@@ -39,6 +41,8 @@ Image& Image::colorRotate() {
         };
     };
 
-    std::transform(pixels.begin(), pixels.end(), pixels.begin(), color_rotate);
+    for (std::vector<Pixel>& row : pixels) {
+        std::transform(row.begin(), row.end(), row.begin(), color_rotate);
+    }
     return *this;
 }
