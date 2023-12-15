@@ -12,6 +12,14 @@ Pixel Image::getPixel(int x, int y) const {
     return pixels.at(y).at(x);
 }
 
+int Image::getWidth() const {
+    return pixels.at(0).size();
+}
+
+int Image::getHeight() const {
+    return pixels.size();
+}
+
 Image& Image::flipVertically() {
     std::reverse(pixels.begin(), pixels.end());
     return *this;

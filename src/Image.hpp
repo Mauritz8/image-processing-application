@@ -10,6 +10,8 @@ class Image {
 
         const std::vector<std::vector<Pixel>>& getPixels() const;
         Pixel getPixel(int x, int y) const;
+        int getWidth() const;
+        int getHeight() const;
 
         Image& flipVertically();
         Image& invertColor();
