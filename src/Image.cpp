@@ -90,16 +90,14 @@ Image& Image::crop(int factor) {
     const int newWidth = width / factor;
     const int widthOffset = (width - newWidth) / 2;
 
+    auto cropRow = [&](const std::vector<Pixel>& row) {
+        return std::vector<Pixel>(row.begin() + widthOffset, row.end() - widthOffset);
+    };
+
     std::vector<std::vector<Pixel>> newPixels;
-    newPixels.reserve(height / factor);
-    for (int i = heightOffset; i < height - heightOffset; i++) {
-        std::vector<Pixel> newRow; 
-        newRow.reserve(width / factor);
-        for (int j = widthOffset; j < width - widthOffset; j++) {
-            newRow.push_back(getPixel(j, i));
-        }
-        newPixels.push_back(newRow);
-    }
+    newPixels.reserve(newHeight);
+    std::transform(pixels.begin() + heightOffset, pixels.end() - heightOffset, newPixels.begin(), cropRow);
+
     pixels = newPixels;
 
     return *this; 
