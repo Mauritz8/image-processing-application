@@ -16,15 +16,8 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     }
 
     std::ifstream file(filepath, std::ifstream::binary);
-
-    BitmapHeader bitmapHeader;
     file.read(reinterpret_cast<char*>(&bitmapHeader), sizeof(bitmapHeader));
-    this->bitmapHeader = bitmapHeader;
-
-    DIBHeader dibHeader;
     file.read(reinterpret_cast<char*>(&dibHeader), sizeof(dibHeader));
-    this->dibHeader = dibHeader;
-    
 
     const int rowPadding = dibHeader.width % 4;
     std::vector<std::vector<Pixel>> pixels;
