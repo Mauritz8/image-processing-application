@@ -61,14 +61,6 @@ void BitmapImg::save(const std::string& filepath) {
     file.close();
 }
 
-const BitmapHeader& BitmapImg::getBitmapHeader() const {
-    return bitmapHeader;
-}
-
-const DIBHeader& BitmapImg::getDIBHeader() const {
-    return dibHeader;
-}
-
 Image& BitmapImg::getImage() {
     return image;
 }
