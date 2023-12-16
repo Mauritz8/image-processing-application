@@ -1,13 +1,13 @@
 #include "BitmapImg.hpp"
 
 #include <cstddef>
+#include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
-
-#include "HelperFunctions.hpp"
 
 
 BitmapImg::BitmapImg(const std::string& filepath)  {
@@ -37,7 +37,9 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
         }
         pixels.push_back(row);
 
-        read(rowPadding, file);
+        for (int i = 0; i < rowPadding; i++) {
+            file.get();
+        }
     }
     this->image = Image(pixels);
 
@@ -48,38 +50,19 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
 void BitmapImg::save(const std::string& filepath) {
     std::ofstream file(filepath, std::ofstream::binary);
 
-    auto writeField = [&file](int num, int nBytes) {
-        write(getBytes(num, nBytes), file);
-    };
-
     updateMetadata();
 
-    file << bitmapHeader.identity[0] << bitmapHeader.identity[1];
-    writeField(bitmapHeader.nBytes, 4);
-    writeField(bitmapHeader.reserved1, 2);
-    writeField(bitmapHeader.reserved2, 2);
-    writeField(bitmapHeader.offset, 4);
+    file.write(reinterpret_cast<char*>(&bitmapHeader), sizeof(bitmapHeader));
+    file.write(reinterpret_cast<char*>(&dibHeader), sizeof(dibHeader));
 
-    writeField(dibHeader.dibHeaderSize, 4);
-    writeField(dibHeader.width, 4);
-    writeField(dibHeader.height, 4);
-    writeField(dibHeader.colorPlanes, 2);
-    writeField(dibHeader.bitsPerPixel, 2);
-    writeField(dibHeader.compressionMethod, 4);
-    writeField(dibHeader.imageSize, 4);
-    writeField(dibHeader.horizontalRes, 4);
-    writeField(dibHeader.verticalRes, 4);
-    writeField(dibHeader.nColors, 4);
-    writeField(dibHeader.nImportantColors, 4);
-
+    const int nBytesPadding = image.getWidth() % 4;
     for (auto row : image.getPixels()) {
         for (auto pixel : row) {
-            writeField(pixel.blue, 1);
-            writeField(pixel.green, 1);
-            writeField(pixel.red, 1);
+            file.write(reinterpret_cast<char*>(&pixel), sizeof(pixel));
         }
-        const int nBytesPadding = row.size() % 4;
-        writeField(0, nBytesPadding);
+        for (int i = 0; i < nBytesPadding; i++) {
+            file << (int8_t) 0;
+        }
     }
 
     file.close();
@@ -88,13 +71,12 @@ void BitmapImg::save(const std::string& filepath) {
 bool BitmapImg::isValidBMP(const std::string& filepath) const {
     std::ifstream file(filepath, std::ifstream::binary);
 
-    const std::string identity = read(2, file);
+    char identity[2];
+    file.read(identity, 2);
     file.close();
 
-    if (identity != "BM") {
-        return false;
-    }
-    return true;
+    const bool isValidIdentity = strcmp(identity, "BM") == 0; 
+    return isValidIdentity;
 }
 
 const BitmapHeader& BitmapImg::getBitmapHeader() const {
