@@ -61,17 +61,6 @@ void BitmapImg::save(const std::string& filepath) {
     file.close();
 }
 
-bool BitmapImg::isValidBMP(const std::string& filepath) const {
-    std::ifstream file(filepath, std::ifstream::binary);
-
-    char identity[2];
-    file.read(identity, 2);
-    file.close();
-
-    const bool isValidIdentity = strcmp(identity, "BM") == 0; 
-    return isValidIdentity;
-}
-
 const BitmapHeader& BitmapImg::getBitmapHeader() const {
     return bitmapHeader;
 }
@@ -82,6 +71,17 @@ const DIBHeader& BitmapImg::getDIBHeader() const {
 
 Image& BitmapImg::getImage() {
     return image;
+}
+
+bool BitmapImg::isValidBMP(const std::string& filepath) const {
+    std::ifstream file(filepath, std::ifstream::binary);
+
+    char identity[2];
+    file.read(identity, 2);
+    file.close();
+
+    const bool isValidIdentity = strcmp(identity, "BM") == 0; 
+    return isValidIdentity;
 }
 
 void BitmapImg::updateMetadata() {

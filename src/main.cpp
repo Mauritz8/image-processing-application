@@ -4,7 +4,9 @@
 
 
 int main() {
-    BitmapImg bitmapImg = BitmapImg("test.bmp");
-    std::cout << bitmapImg.getBitmapHeader();
-    std::cout << bitmapImg.getDIBHeader();
+    BitmapImg bitmapImg = BitmapImg("test2.bmp");
+    bitmapImg.getImage()
+        .flipVertically()
+        .colorRotate();
+    bitmapImg.save("new-test.bmp");
 }

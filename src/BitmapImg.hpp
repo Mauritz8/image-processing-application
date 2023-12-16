@@ -10,7 +10,6 @@ class BitmapImg {
     public:
         BitmapImg(const std::string& filepath);
         void save(const std::string& filepath);
-        bool isValidBMP(const std::string& filepath) const;
 
         const BitmapHeader& getBitmapHeader() const;
         const DIBHeader& getDIBHeader() const;
@@ -21,5 +20,6 @@ class BitmapImg {
         DIBHeader dibHeader;
         Image image;
 
+        bool isValidBMP(const std::string& filepath) const;
         void updateMetadata();
 };
