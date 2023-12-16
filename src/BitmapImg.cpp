@@ -21,28 +21,12 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
         return calcLittleEndianByteSequence(read(n, file));
     };
 
-    const BitmapHeader bitmapHeader = {
-        .identity = read(2, file),
-        .nBytes = calcBytes(4), 
-        .reserved1 = calcBytes(2),
-        .reserved2 = calcBytes(2),
-        .offset = calcBytes(4)
-    };
+    BitmapHeader bitmapHeader;
+    file.read(reinterpret_cast<char*>(&bitmapHeader), sizeof(bitmapHeader));
     this->bitmapHeader = bitmapHeader;
 
-    const DIBHeader dibHeader = {
-        .dibHeaderSize = calcBytes(4),
-        .width = calcBytes(4),
-        .height = calcBytes(4),
-        .colorPlanes = calcBytes(2),
-        .bitsPerPixel = calcBytes(2),
-        .compressionMethod = calcBytes(4),
-        .imageSize = calcBytes(4),
-        .horizontalRes = calcBytes(4),
-        .verticalRes = calcBytes(4),
-        .nColors = calcBytes(4),
-        .nImportantColors = calcBytes(4),
-    };
+    DIBHeader dibHeader;
+    file.read(reinterpret_cast<char*>(&dibHeader), sizeof(dibHeader));
     this->dibHeader = dibHeader;
     
 
