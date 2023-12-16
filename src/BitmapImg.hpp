@@ -11,8 +11,6 @@ class BitmapImg {
         BitmapImg(const std::string& filepath);
         void save(const std::string& filepath);
 
-        const BitmapHeader& getBitmapHeader() const;
-        const DIBHeader& getDIBHeader() const;
         Image& getImage();
 
     private:
