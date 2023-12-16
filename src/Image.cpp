@@ -1,6 +1,7 @@
 #include "Image.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <vector>
 
 
@@ -28,9 +29,9 @@ Image& Image::flipVertically() {
 Image& Image::invertColor() {
     auto colorInvert = [](Pixel p) {
         return Pixel{
-            .red = 255 - p.red,
-            .green = 255 - p.green,
-            .blue = 255 - p.blue,
+            .blue = static_cast<uint8_t>(255 - p.blue),
+            .green = static_cast<uint8_t>(255 - p.green),
+            .red = static_cast<uint8_t>(255 - p.red),
         };
     };
 
@@ -43,9 +44,9 @@ Image& Image::invertColor() {
 Image& Image::colorRotate() {
     auto colorRotate = [](Pixel p) {
         return Pixel{
-            .red = p.blue,
-            .green = p.red,
             .blue = p.green,
+            .green = p.red,
+            .red = p.blue,
         };
     };
 

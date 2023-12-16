@@ -3,8 +3,8 @@
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
     os << "RGB(" 
-       << pixel.red << ", "
-       << pixel.green << ", "
-       << pixel.blue << ")\n";
+       << (unsigned) pixel.red << ", "
+       << (unsigned) pixel.green << ", "
+       << (unsigned) pixel.blue << ")\n";
     return os;
 }

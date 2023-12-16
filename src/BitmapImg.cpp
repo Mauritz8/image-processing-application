@@ -17,10 +17,6 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
 
     std::ifstream file(filepath, std::ifstream::binary);
 
-    auto calcBytes = [&file](int n) {
-        return calcLittleEndianByteSequence(read(n, file));
-    };
-
     BitmapHeader bitmapHeader;
     file.read(reinterpret_cast<char*>(&bitmapHeader), sizeof(bitmapHeader));
     this->bitmapHeader = bitmapHeader;
@@ -35,16 +31,8 @@ BitmapImg::BitmapImg(const std::string& filepath)  {
     for (int i = 0; i < dibHeader.height; i++) {
         std::vector<Pixel> row;
         for (int j = 0; j < dibHeader.width; j++) {
-            const int blue = calcBytes(1);
-            const int green = calcBytes(1);
-            const int red = calcBytes(1);
-
-
-            const Pixel pixel = {
-                .red = red,
-                .green = green,
-                .blue = blue,
-            };
+            Pixel pixel;
+            file.read(reinterpret_cast<char*>(&pixel), sizeof(pixel));
             row.push_back(pixel);
         }
         pixels.push_back(row);
@@ -66,7 +54,7 @@ void BitmapImg::save(const std::string& filepath) {
 
     updateMetadata();
 
-    file << bitmapHeader.identity;
+    file << bitmapHeader.identity[0] << bitmapHeader.identity[1];
     writeField(bitmapHeader.nBytes, 4);
     writeField(bitmapHeader.reserved1, 2);
     writeField(bitmapHeader.reserved2, 2);

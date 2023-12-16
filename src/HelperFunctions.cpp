@@ -17,20 +17,6 @@ void write(const std::vector<unsigned char>& chars, std::ofstream& file) {
     }
 }
 
-int calcLittleEndianByteSequence(const std::string& bytes) {
-    const size_t nBytes = bytes.size();
-    int sum = 0;
-    for (size_t i = 0; i < nBytes; i++) {
-        const int value = convertCharToUnsignedInt(bytes.at(i));
-        sum += value * std::pow(256, i); 
-    }
-    return sum;
-}
-
-int convertCharToUnsignedInt(char ch) {
-    return static_cast<int>(static_cast<unsigned char>(ch));
-}
-
 std::vector<unsigned char> getBytes(int num, int nBytes) {
     std::vector<unsigned char> bytes;
     bytes.reserve(nBytes);
