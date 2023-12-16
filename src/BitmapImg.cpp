@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -10,6 +11,10 @@
 
 
 BitmapImg::BitmapImg(const std::string& filepath)  {
+    if (!isValidBMP(filepath)) {
+        throw std::invalid_argument("Invalid BMP file");
+    }
+
     std::ifstream file(filepath, std::ifstream::binary);
 
     auto calcBytes = [&file](int n) {
@@ -106,6 +111,18 @@ void BitmapImg::save(const std::string& filepath) {
     }
 
     file.close();
+}
+
+bool BitmapImg::isValidBMP(const std::string& filepath) const {
+    std::ifstream file(filepath, std::ifstream::binary);
+
+    const std::string identity = read(2, file);
+    file.close();
+
+    if (identity != "BM") {
+        return false;
+    }
+    return true;
 }
 
 const BitmapHeader& BitmapImg::getBitmapHeader() const {
